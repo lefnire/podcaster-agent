@@ -17,11 +17,17 @@ if ! command -v curl >/dev/null || ! command -v jq >/dev/null; then
   sudo apt-get install -y --no-install-recommends curl jq
 fi
 
-# ---- Playwright headless browser ----
-# Fallback for JS-rendered / bot-gated research pages that curl + WebFetch
-# can't read. Optional — drop this block if you never want browser automation.
-# The Playwright MCP (wired in .mcp.json) drives chrome-for-testing, a separate
-# binary from `playwright install chromium`. install-deps needs root (apt); the
-# browser binary is then snapshotted.
-sudo npx --yes playwright install-deps chromium
-npx --yes @playwright/mcp install-browser chrome-for-testing
+# ---- Playwright headless browser (optional fallback) ----
+# For JS-rendered / bot-gated pages that curl + WebFetch can't read. Drop this
+# block if you never want browser automation — the agent runs fine without it.
+#
+# Node ignores the system cert store, so behind Claude Code web's TLS-intercepting
+# proxy npm dies with SELF_SIGNED_CERT_IN_CHAIN even though curl works; point it
+# at the CA bundle curl already trusts. (sudo resets env, so pass the var through.)
+# Best-effort: a browser-install hiccup must not brick the whole setup.
+ca=/etc/ssl/certs/ca-certificates.crt
+export NODE_EXTRA_CA_CERTS="$ca"
+if ! { sudo NODE_EXTRA_CA_CERTS="$ca" npx --yes playwright install-deps chromium \
+    && npx --yes @playwright/mcp install-browser chrome-for-testing; }; then
+  echo "WARN: Playwright install failed; continuing without browser automation." >&2
+fi
