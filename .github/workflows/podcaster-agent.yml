@@ -1,0 +1,17 @@
+name: Podcaster agent
+on:
+  schedule: [{ cron: "0 14 * * *" }]   # daily 14:00 UTC
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      OCDEVEL_API_KEY: ${{ secrets.OCDEVEL_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./setup.sh
+      - run: npm i -g @anthropic-ai/claude-code
+      # CLAUDE.md auto-loads as project memory. --dangerously-skip-permissions
+      # is acceptable here because CI is unattended and the container is throwaway.
+      - run: claude -p --dangerously-skip-permissions "See CLAUDE.md."

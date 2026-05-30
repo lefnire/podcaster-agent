@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "WebSearch",
+      "WebFetch",
+      "mcp__playwright__*"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "defaultMode": "acceptEdits"
+}
