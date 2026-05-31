@@ -38,7 +38,9 @@ it needs a repo you own. Then at [claude.ai/code/routines](https://claude.ai/cod
    it ensures `curl`/`jq` and installs a headless browser (Playwright) for JS-rendered or
    bot-gated research pages. Skip if `curl`/`jq` are present and you don't need browser scraping.
 
-That's it. Self-corrections (see below) land on a `claude/*` branch you can review and merge.
+That's it. When a run snags, the agent fixes the repo config and merges its own pull request
+(see [Staying current](#staying-current)) so the fix is live next run — the PR history is your
+audit trail.
 
 ---
 
@@ -56,9 +58,12 @@ claude -p "See CLAUDE.md."
 
 ### GitHub Actions cron
 
-Fork the repo, add `OCDEVEL_API_KEY` and `ANTHROPIC_API_KEY` as repo secrets.
-[`.github/workflows/podcaster-agent.yml`](./.github/workflows/podcaster-agent.yml) runs daily and
-on manual dispatch.
+A ready-to-use workflow ships as a **sample** at
+[`examples/github-actions/`](./examples/github-actions/). It lives outside
+`.github/workflows/` on purpose, so forking this repo never auto-starts a cron you didn't
+ask for. To turn it on, copy it into `.github/workflows/` and add `OCDEVEL_API_KEY` +
+`ANTHROPIC_API_KEY` as repo secrets — full steps in
+[the sample's README](./examples/github-actions/README.md).
 
 ### Other agents (Codex, etc.)
 
@@ -70,7 +75,8 @@ search/fetch, and a large-enough-context LLM.
 ## Staying current
 
 `setup.sh`, `env.example.sh`, `.claude/settings.json`, and `.mcp.json` describe the environment
-the agent expects, and `CLAUDE.md` tells it to fix and commit those when a run snags. Your fork
-accumulates your own agent's fixes; **watch [the upstream repo](https://github.com/lefnire/podcaster-agent)**
-and sync your fork to pick up improvements — most also need a matching tweak (a new env var, a
-network-allowlist change) in your Routine / environment settings, since those live outside the repo.
+the agent expects, and `CLAUDE.md` tells it to fix those when a run snags — landing each fix as a
+merged pull request you can review after the fact. Your fork accumulates your own agent's fixes;
+**watch [the upstream repo](https://github.com/lefnire/podcaster-agent)** and sync your fork to
+pick up improvements — most also need a matching tweak (a new env var, a network-allowlist change)
+in your Routine / environment settings, since those live outside the repo.
