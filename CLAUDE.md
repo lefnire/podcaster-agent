@@ -39,10 +39,9 @@ should be, fix the cause and commit a one-line change — don't refactor past th
   next run skips the trial-and-error. (E.g. if one web-fetch method beats the others for a
   stubborn source, record that — don't rediscover it every run.)
 
-**Land the fix.** Runs are unattended, so a fix left on a branch never reaches the next run.
-After committing a repo-config fix, open a PR and merge it to `main` yourself (squash, via the
-GitHub MCP `create_pull_request` + `merge_pull_request`). Config files only; episodes go through
-the OCDevel API, never committed.
+**Land the fix.** Runs are unattended, so a fix that never merges never reaches the next run.
+After committing a repo-config change, open a pull request and merge it. (Config files only;
+episodes go through the OCDevel API, never committed here.)
 
 ## Notes to future runs
 

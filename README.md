@@ -38,7 +38,9 @@ it needs a repo you own. Then at [claude.ai/code/routines](https://claude.ai/cod
    it ensures `curl`/`jq` and installs a headless browser (Playwright) for JS-rendered or
    bot-gated research pages. Skip if `curl`/`jq` are present and you don't need browser scraping.
 
-That's it. Self-corrections (see below) land on a `claude/*` branch you can review and merge.
+That's it. When a run snags, the agent fixes the repo config and merges its own pull request
+(see [Staying current](#staying-current)) so the fix is live next run — the PR history is your
+audit trail.
 
 ---
 
@@ -73,7 +75,8 @@ search/fetch, and a large-enough-context LLM.
 ## Staying current
 
 `setup.sh`, `env.example.sh`, `.claude/settings.json`, and `.mcp.json` describe the environment
-the agent expects, and `CLAUDE.md` tells it to fix and commit those when a run snags. Your fork
-accumulates your own agent's fixes; **watch [the upstream repo](https://github.com/lefnire/podcaster-agent)**
-and sync your fork to pick up improvements — most also need a matching tweak (a new env var, a
-network-allowlist change) in your Routine / environment settings, since those live outside the repo.
+the agent expects, and `CLAUDE.md` tells it to fix those when a run snags — landing each fix as a
+merged pull request you can review after the fact. Your fork accumulates your own agent's fixes;
+**watch [the upstream repo](https://github.com/lefnire/podcaster-agent)** and sync your fork to
+pick up improvements — most also need a matching tweak (a new env var, a network-allowlist change)
+in your Routine / environment settings, since those live outside the repo.
