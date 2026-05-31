@@ -42,4 +42,7 @@ don't refactor past the snag:
 
 ## Notes to future runs
 
-_(empty — append hard-won, run-specific specifics here as you discover them)_
+- **Submitting episodes:** the narration text is large and full of quotes/newlines. Build the POST body with `jq -n --rawfile text /tmp/episode.md --rawfile shownotes /tmp/shownotes.md ...` and `curl -d @payload.json` rather than inlining the text into a shell string — avoids all escaping pain. `$OCDEVEL_API_KEY` is set in the environment.
+- **Claiming a pending row:** pass the pending episode's `id` straight through as `audio_id`. Success returns `data[0] = {id, episode_id}`.
+- **Word floors are real:** synthesis must hit `target_minutes × 150` ±20% *per segment*, never below the floor. Count each segment separately (split on the segment headings) and pad thin sections; don't trust the combined total.
+- **Steady state:** if `<pending_episodes>` is healthy and there's no `<feedback>`, skip `tts_agent_prep` entirely — don't send an empty `<prep/>`.
