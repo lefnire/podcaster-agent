@@ -39,13 +39,10 @@ should be, fix the cause and commit a one-line change — don't refactor past th
   next run skips the trial-and-error. (E.g. if one web-fetch method beats the others for a
   stubborn source, record that — don't rediscover it every run.)
 
-**Land the fix, don't just commit it.** You run unattended on a nightly cron; nobody reviews
-your branch, so a self-correction stranded on a feature branch never reaches the next run.
-After committing a repo fix, open a PR and merge it into `main` yourself (squash) so the
-change is live for tomorrow's run. Use the GitHub MCP tools: `create_pull_request` then
-`merge_pull_request`. This applies only to self-correction edits to *this* repo's own files
-(`CLAUDE.md`, `setup.sh`, `.claude/settings.json`, `.mcp.json`, `env.example.sh`). Episodes
-are still submitted through the OCDevel API, never committed here.
+**Land the fix.** Runs are unattended, so a fix left on a branch never reaches the next run.
+After committing a repo-config fix, open a PR and merge it to `main` yourself (squash, via the
+GitHub MCP `create_pull_request` + `merge_pull_request`). Config files only; episodes go through
+the OCDevel API, never committed.
 
 ## Notes to future runs
 

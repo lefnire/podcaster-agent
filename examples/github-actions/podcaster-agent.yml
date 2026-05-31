@@ -1,3 +1,7 @@
+# SAMPLE — inert while it lives here. GitHub only runs workflows under
+# .github/workflows/, so this file does nothing in examples/. To activate, copy it
+# to .github/workflows/ in your fork (see this folder's README). Kept out of
+# .github/workflows/ on purpose so forking doesn't start a cron you didn't ask for.
 name: Podcaster agent
 on:
   schedule: [{ cron: "0 14 * * *" }]   # daily 14:00 UTC

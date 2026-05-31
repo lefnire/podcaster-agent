@@ -56,9 +56,12 @@ claude -p "See CLAUDE.md."
 
 ### GitHub Actions cron
 
-Fork the repo, add `OCDEVEL_API_KEY` and `ANTHROPIC_API_KEY` as repo secrets.
-[`.github/workflows/podcaster-agent.yml`](./.github/workflows/podcaster-agent.yml) runs daily and
-on manual dispatch.
+A ready-to-use workflow ships as a **sample** at
+[`examples/github-actions/`](./examples/github-actions/). It lives outside
+`.github/workflows/` on purpose, so forking this repo never auto-starts a cron you didn't
+ask for. To turn it on, copy it into `.github/workflows/` and add `OCDEVEL_API_KEY` +
+`ANTHROPIC_API_KEY` as repo secrets — full steps in
+[the sample's README](./examples/github-actions/README.md).
 
 ### Other agents (Codex, etc.)
 
