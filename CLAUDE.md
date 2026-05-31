@@ -27,9 +27,8 @@ the work (which tools, what order) is your call — use your judgment.
 
 `setup.sh` and `env.example.sh` document the environment you expect; `.claude/settings.json`
 pre-approves your tools; `.mcp.json` configures MCP servers (e.g. the Playwright browser).
-Edits here take effect on *future* runs (not mid-session), and the host watches this repo for
-them. When a run is harder than it should be, fix the cause and commit a one-line change —
-don't refactor past the snag:
+Edits here take effect on *future* runs (not mid-session). When a run is harder than it
+should be, fix the cause and commit a one-line change — don't refactor past the snag:
 
 - Missing tool/package → add it to `setup.sh`.
 - You hit a permission prompt → add the pattern to `.claude/settings.json`.
@@ -40,6 +39,17 @@ don't refactor past the snag:
   next run skips the trial-and-error. (E.g. if one web-fetch method beats the others for a
   stubborn source, record that — don't rediscover it every run.)
 
+**Land the fix, don't just commit it.** You run unattended on a nightly cron; nobody reviews
+your branch, so a self-correction stranded on a feature branch never reaches the next run.
+After committing a repo fix, open a PR and merge it into `main` yourself (squash) so the
+change is live for tomorrow's run. Use the GitHub MCP tools: `create_pull_request` then
+`merge_pull_request`. This applies only to self-correction edits to *this* repo's own files
+(`CLAUDE.md`, `setup.sh`, `.claude/settings.json`, `.mcp.json`, `env.example.sh`). Episodes
+are still submitted through the OCDevel API, never committed here.
+
 ## Notes to future runs
 
-_(empty — append hard-won, run-specific specifics here as you discover them)_
+- **Submitting episodes:** the narration text is large and full of quotes/newlines. Build the POST body with `jq -n --rawfile text /tmp/episode.md --rawfile shownotes /tmp/shownotes.md ...` and `curl -d @payload.json` rather than inlining the text into a shell string — avoids all escaping pain. `$OCDEVEL_API_KEY` is set in the environment.
+- **Claiming a pending row:** pass the pending episode's `id` straight through as `audio_id`. Success returns `data[0] = {id, episode_id}`.
+- **Word floors are real:** synthesis must hit `target_minutes × 150` ±20% *per segment*, never below the floor. Count each segment separately (split on the segment headings) and pad thin sections; don't trust the combined total.
+- **Steady state:** if `<pending_episodes>` is healthy and there's no `<feedback>`, skip `tts_agent_prep` entirely — don't send an empty `<prep/>`.
